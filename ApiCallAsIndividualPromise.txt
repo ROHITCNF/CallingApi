@@ -1,0 +1,67 @@
+//gobal declaration
+const URL1 = "https://catfact.ninja/fact";
+const URL2 = "https://api.publicapis.org/entries";
+const arr1 = {};
+const arr2 = [];
+const arr3 =[];
+
+//creating 1st promise
+const promise1 = getData1(URL1);
+
+//consumer code 1
+ promise1
+ .then((data) =>{
+ arr1.fact = data.fact;
+ arr1.length = data.length;
+ //console.log(arr1);
+ })
+ .catch( (err) =>{
+  console.log("api 1 error",err.message);
+ });
+
+//producer code 2
+async function getData1(url){
+   const response = await fetch(url);
+  return response.json();
+}
+
+//creating 2nd promise
+const promise2 = getData2(URL2);
+
+//consumer code 2
+promise2
+.then( (data)=>{
+   const dataArray = data.entries;
+   //limiting api2 data at max 10 for readability
+   for(let i=0;i<10;i++){
+    arr2.push(dataArray[i].API);
+   }
+  // console.log(arr2);
+})
+.then( () =>{
+for(let i=0;i<arr2.length;i++){
+const newObject = {
+api1Length : arr1.length,
+api1Fact : arr1.fact,
+api2API :arr2[i]
+};
+ arr3.push(newObject);
+ }
+ console.log("combined both the data and logging as arr3",arr3);
+})
+.catch( (err) =>{
+  console.log("api 2 error",err.message);
+ });
+
+
+//producer code 2
+async function getData2(url){
+const response = await fetch(url);
+return response.json();
+}
+
+
+/*Doubt to be asked*/
+/* console.log("problem is still here we can't access the arr1 and arr2 here");
+console.log(arr1,"arr1");
+console.log(arr1,"arr2"); */
